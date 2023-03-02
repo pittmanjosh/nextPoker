@@ -1,7 +1,41 @@
-export type Card = {
+import capitalizeFirstLetter from "src/utils/capitalizeFirstLetter";
+
+export interface iCard {
   suit: CardSuit;
   value: CardValue;
-};
+}
+
+export class Card {
+  private suit: CardSuit;
+  private value: CardValue;
+
+  constructor(card: iCard) {
+    this.suit = card.suit;
+    this.value = card.value;
+  }
+
+  getPoints() {
+    return this.value.points;
+  }
+
+  getSuit() {
+    return this.suit.name;
+  }
+
+  getColor() {
+    return this.suit.color;
+  }
+
+  getFullName() {
+    return `${capitalizeFirstLetter(
+      this.value.name
+    )} of ${capitalizeFirstLetter(this.suit.name)}`;
+  }
+
+  getSuitSortIndex() {
+    return this.suit.sortIndex;
+  }
+}
 
 type CardSuit = {
   name: "spades" | "diamonds" | "clubs" | "hearts";

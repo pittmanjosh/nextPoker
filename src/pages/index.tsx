@@ -1,26 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "@styles/Home.module.css";
-import { Card as CardType, Suits, Values } from "@models/Card";
-import Card from "@components/Card";
-import sortCards from "@services/sortCards";
+import styles from "@components/styles/Home.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const deck: CardType[] = [];
-
-Suits.forEach((suit) => {
-  Values.forEach((value) => {
-    deck.push({ suit, value });
-  });
-});
-
-const newDeck = {};
-
 export default function Home() {
-  console.log(deck);
-  console.log(sortCards(deck));
   return (
     <>
       <Head>
@@ -30,9 +15,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {sortCards(deck).map((x) => {
-          return <Card card={x} key={`${x.suit.name}${x.value.name}`} />;
-        })}
         <div className={styles.center}>
           <Image
             className={styles.logo}
