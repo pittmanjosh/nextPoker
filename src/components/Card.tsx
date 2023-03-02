@@ -1,15 +1,14 @@
 import React from "react";
-import { Card } from "@components/models/Card";
+import { Card as CardClass } from "@models/Card";
 
 type Props = {
-  card: Card;
+  card: CardClass;
 };
-const Card = (props: Props) => {
-  const { card } = props;
+const Card = ({ card }: Props) => {
   return (
     <div
-      className={`playing-card ${card.suit.color}`}
-    >{`${card.suit.symbol}${card.value.symbol}`}</div>
+      className={`playing-card ${card.getColor()}`}
+    >{`${card.getSymbol()}`}</div>
   );
 };
 

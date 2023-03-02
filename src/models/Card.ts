@@ -35,6 +35,10 @@ export class Card {
   getSuitSortIndex() {
     return this.suit.sortIndex;
   }
+
+  getSymbol() {
+    return `${this.suit.symbol}${this.value.symbol}`;
+  }
 }
 
 type CardSuit = {
@@ -172,3 +176,5 @@ export const Values: CardValue[] = [
   Queen,
   King,
 ];
+
+export default Card;
