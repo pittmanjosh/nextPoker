@@ -1,11 +1,26 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@components/styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import styles from "@styles/Home.module.css";
+import { Card as CardType, Suits, Values } from "@models/Card";
+import Card from "@components/Card";
+import sortCards from "@services/sortCards";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
+
+const deck: CardType[] = [];
+
+Suits.forEach((suit) => {
+  Values.forEach((value) => {
+    deck.push({ suit, value });
+  });
+});
+
+const newDeck = {};
 
 export default function Home() {
+  console.log(deck);
+  console.log(sortCards(deck));
   return (
     <>
       <Head>
@@ -15,30 +30,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
+        {sortCards(deck).map((x) => {
+          return <Card card={x} key={`${x.suit.name}${x.value.name}`} />;
+        })}
         <div className={styles.center}>
           <Image
             className={styles.logo}
@@ -119,5 +113,5 @@ export default function Home() {
         </div>
       </main>
     </>
-  )
+  );
 }
