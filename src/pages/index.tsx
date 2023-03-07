@@ -5,25 +5,17 @@ import styles from "@styles/Home.module.css";
 import createDeck from "@services/createDeck";
 import Card from "@components/Card";
 import sortCards from "@services/sortCards";
-import Game from "@models/Game";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "react-bootstrap";
+import CharacterSelector from "@components/CharacterSelector";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const [game, setGame] = useState(new Game());
-
   return (
     <div>
-      <Button
-        onClick={() => {
-          game.getDeck().shuffle();
-          setGame(game);
-        }}
-      >
-        Shuffle Deck
-      </Button>
+      <CharacterSelector />
+      <Button>Button </Button>
     </div>
   );
 }

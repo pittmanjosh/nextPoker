@@ -1,4 +1,4 @@
-import capitalizeFirstLetter from "src/utils/capitalizeFirstLetter";
+import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 export interface iCard {
   suit: CardSuit;

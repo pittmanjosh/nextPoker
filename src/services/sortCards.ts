@@ -1,4 +1,4 @@
-import { Card } from "../models/Card";
+import { Card } from "../classes/Card";
 
 const cardSort = (firstCard: Card, secondCard: Card) => {
   if (firstCard.getPoints() == secondCard.getPoints()) {
