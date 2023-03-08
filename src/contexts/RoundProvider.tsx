@@ -6,18 +6,17 @@ import React, {
   useReducer,
 } from "react";
 import Card from "@classes/Card";
-
-type Hand = {
-  playerId: number;
-  nameOfHand: string;
-  cards: Card[];
-};
+import Round from "@models/Round";
+import roundReducer, {
+  initialRound,
+  RoundAction,
+} from "@services/round/reducers";
 
 const RoundContext = createContext<Round>(initialRound);
 const RoundDispatchContext = createContext<Dispatch<RoundAction>>(() => {});
 
 export default function RoundProvider({ children }: PropsWithChildren) {
-  const [round, dispatch] = useReducer(gameReducer, initialRound);
+  const [round, dispatch] = useReducer(roundReducer, initialRound);
 
   return (
     <RoundContext.Provider value={round}>

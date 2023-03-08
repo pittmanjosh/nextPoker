@@ -7,10 +7,4 @@ export type Round = {
   deck: Card[];
 };
 
-export const initialRound: Round = {
-  community: [],
-  hands: [],
-  deck: [],
-};
-
 export default Round;
