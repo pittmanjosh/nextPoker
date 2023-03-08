@@ -1,4 +1,4 @@
-import sortCards from "./sortCards";
+import { sortCards } from "@services/card";
 import { Spades, Diamonds, Ace, Two, Three, Card } from "@classes/Card";
 
 const aceOfSpades: Card = new Card({ suit: Spades, value: Ace });

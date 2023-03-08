@@ -1,9 +1,14 @@
-import { ActionPayload } from "@services/reducers";
+import { ActionPayload } from "@services/game/reducers";
 import Game from "@models/Game";
 import { Score } from "@models/Player";
 import Card from "@classes/Card";
-import { dealCardToPlayer } from "@services/player";
+import { dealCardToPlayer, sortByPlayerOrder } from "@services/player";
 
+// Initial Player attributes
+const initPlayerAttributes = {
+  score: { wins: 0, ties: 0, losses: 0 },
+  pocket: [],
+};
 // Players start with empty score
 const initScore: Score = { wins: 0, ties: 0, losses: 0 };
 
@@ -13,25 +18,20 @@ const initScore: Score = { wins: 0, ties: 0, losses: 0 };
  * @param payload of ActionPayload
  * @returns Game
  */
-export function addPlayer(game: Game, payload: ActionPayload) {
-  if (payload.character == undefined) {
-    throw Error("Missing character");
-  } else if (game.players.length >= 6) {
-    throw Error("Too many players");
+export function addPlayers(game: Game, payload: ActionPayload) {
+  if (payload.characters == undefined) {
+    throw Error("Missing characters");
   }
+
+  const addedPlayers = payload.characters.map((character, playerId) => {
+    const isUser = playerId === 0;
+
+    return { character, score: initScore, pocket: [], isUser, playerId };
+  });
 
   return {
     ...game,
-    players: [
-      ...game.players,
-      {
-        character: payload.character,
-        score: initScore,
-        pocket: [],
-        isUser: game.players.length == 0,
-        playerId: game.players.length,
-      },
-    ],
+    players: addedPlayers,
   };
 }
 
@@ -62,6 +62,5 @@ export function assignPlayerOrder(game: Game) {
     };
   });
 
-  console.log(orderedPlayers);
-  return { ...game, players: orderedPlayers };
+  return { ...game, players: sortByPlayerOrder(orderedPlayers) };
 }

@@ -6,7 +6,7 @@ import React, {
   useReducer,
 } from "react";
 import Game, { initialGame } from "@models/Game";
-import reducer, { GameAction } from "@services/reducers";
+import reducer, { GameAction } from "@services/game/reducers";
 
 const GameContext = createContext<Game>(initialGame);
 const GameDispatchContext = createContext<Dispatch<GameAction>>(() => {});

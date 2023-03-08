@@ -119,3 +119,14 @@ a {
 .playing-card.red {
   color: red;
 }
+
+.selector-character-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 1em;
+  justify-content: center;
+}
+
+.selector-character-panel > img {
+  justify-self: center;
+}

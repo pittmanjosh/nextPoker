@@ -1,7 +1,7 @@
-import React from "react";
-import { CHARACTERS } from "@models/Character";
+import React, { useEffect, useState } from "react";
+import Character, { CHARACTERS } from "@models/Character";
 import { useGameContext, useGameDispatchContext } from "@contexts/GameProvider";
-import { ActionType } from "@services/reducers";
+import { ActionType } from "@services/game/reducers";
 import CharacterImage from "./CharacterImage";
 
 type Props = {};
@@ -9,29 +9,36 @@ type Props = {};
  * Character selector allows the user to select their own character
  */
 const CharacterSelector = (props: Props) => {
-  const { players } = useGameContext();
+  const game = useGameContext();
+  const [characters, setCharacters] = useState<Array<Character>>([]);
   const dispatch = useGameDispatchContext();
 
-  return players.length < 6 ? (
+  const addPlayer = (character: Character) => {
+    const currentPlayers = [...characters, character];
+    setCharacters(currentPlayers);
+
+    if (currentPlayers.length === 6) {
+      dispatch({
+        type: ActionType.ADD_PLAYERS,
+        payload: {
+          characters: currentPlayers,
+        },
+      });
+    }
+  };
+
+  return game.players.length !== 6 ? (
     <div>
       <h1>
-        {players.length == 0
+        {characters.length == 0
           ? "Which character would you like to be?"
-          : `${players[0].character.nickname}, who would you like to play with?`}
+          : `${characters[0].nickname}, who would you like to play with?`}
       </h1>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4,1fr)",
-          rowGap: "1em",
-        }}
-      >
+      <div className="selector-character-panel">
         {CHARACTERS.map((character) => (
           <CharacterImage
             character={character}
-            onClick={() => {
-              dispatch({ type: ActionType.ADD_PLAYER, payload: { character } });
-            }}
+            onClick={() => addPlayer(character)}
             key={character.avatar}
           />
         ))}

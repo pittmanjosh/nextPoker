@@ -1,4 +1,4 @@
-import { Values, Suits, Card } from "../classes/Card";
+import { Values, Suits, Card } from "@classes/Card";
 
 export function createDeck() {
   const deck: Card[] = [];

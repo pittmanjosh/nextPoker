@@ -3,6 +3,7 @@ import Card from "@components/Card";
 import { useGameContext } from "@contexts/GameProvider";
 import CharacterImage from "./CharacterImage";
 Card;
+
 type Props = {};
 
 const Table = (props: Props) => {
