@@ -1,21 +1,19 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import styles from "@styles/Home.module.css";
-import createDeck from "@services/createDeck";
-import Card from "@components/Card";
-import sortCards from "@services/sortCards";
-import { useContext, useState } from "react";
+import { useGameContext, useGameDispatchContext } from "@contexts/GameProvider";
+import Table from "@components/Table";
 import { Button } from "react-bootstrap";
+import { ActionType } from "@services/reducers";
+import { CHARACTERS } from "@models/Character";
 import CharacterSelector from "@components/CharacterSelector";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function Home() {
+  const game = useGameContext();
+  const dispatch = useGameDispatchContext();
+
   return (
-    <div>
+    <div style={{ padding: "2em" }}>
       <CharacterSelector />
-      <Button>Button </Button>
+      <Table />
     </div>
   );
 }

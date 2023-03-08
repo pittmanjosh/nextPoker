@@ -1,56 +1,43 @@
-import React, { useEffect, useState } from "react";
-import Character, { CHARACTERS } from "@models/Character";
-import Image from "next/image";
-import Player from "@models/Player";
-import Game from "@models/Game";
+import React from "react";
+import { CHARACTERS } from "@models/Character";
+import { useGameContext, useGameDispatchContext } from "@contexts/GameProvider";
+import { ActionType } from "@services/reducers";
+import CharacterImage from "./CharacterImage";
 
-type CharacterProps = {
-  character: Character;
-  onClick?: () => void;
-};
+type Props = {};
+/**
+ * Character selector allows the user to select their own character
+ */
+const CharacterSelector = (props: Props) => {
+  const { players } = useGameContext();
+  const dispatch = useGameDispatchContext();
 
-const Character = ({ character, onClick }: CharacterProps) => {
-  return (
-    <Image
-      src={character.avatar}
-      alt={character.name}
-      onClick={onClick}
-      width="50"
-      height="50"
-    />
-  );
-};
-
-type SelectorProps = {
-  game: Game;
-  handleAdd: (newGame: Game) => void;
-};
-
-const CharacterSelector = ({ game, handleAdd }: SelectorProps) => {
-  const currentPlayers = game.getPlayers();
-
-  const availablePlayers: Character[] = CHARACTERS.filter((character) => {
-    return !Boolean(
-      currentPlayers.find((player) => player.getName() == character.name)
-    );
-  });
-
-  useEffect(() => {}, [game]);
-
-  return (
+  return players.length < 6 ? (
     <div>
-      {availablePlayers.map((character) => (
-        <Character
-          character={character}
-          key={character.name}
-          onClick={() => {
-            game.addPlayer(new Player(character, currentPlayers.length == 0));
-            handleAdd(game);
-          }}
-        />
-      ))}
+      <h1>
+        {players.length == 0
+          ? "Which character would you like to be?"
+          : `${players[0].character.nickname}, who would you like to play with?`}
+      </h1>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4,1fr)",
+          rowGap: "1em",
+        }}
+      >
+        {CHARACTERS.map((character) => (
+          <CharacterImage
+            character={character}
+            onClick={() => {
+              dispatch({ type: ActionType.ADD_PLAYER, payload: { character } });
+            }}
+            key={character.avatar}
+          />
+        ))}
+      </div>
     </div>
-  );
+  ) : null;
 };
 
 export default CharacterSelector;

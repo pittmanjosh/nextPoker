@@ -1,12 +1,15 @@
 import "@styles/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import type { AppProps } from "next/app";
-import GameContext from "src/contexts/GameContext";
+import GameProvider from "@contexts/GameProvider";
+import { useReducer } from "react";
+import reducer from "@services/reducers";
+import Game, { initialGame } from "@models/Game";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <GameContext>
+    <GameProvider>
       <Component {...pageProps} />
-    </GameContext>
+    </GameProvider>
   );
 }

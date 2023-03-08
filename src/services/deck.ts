@@ -1,6 +1,6 @@
 import { Values, Suits, Card } from "../classes/Card";
 
-export default function createDeck() {
+export function createDeck() {
   const deck: Card[] = [];
 
   Suits.forEach((suit) => {
@@ -9,6 +9,10 @@ export default function createDeck() {
     });
   });
 
+  return deck;
+}
+
+export function shuffleDeck(deck: Card[]) {
   const shuffledDeck: Card[] = [];
 
   while (deck.length > 0) {
