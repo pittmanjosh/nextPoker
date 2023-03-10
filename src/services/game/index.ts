@@ -1,14 +1,31 @@
 import { ActionPayload } from "@services/game/reducers";
-import Game from "@models/Game";
+import Game, { GameState } from "@models/Game";
 import { Score } from "@models/Player";
 import Card from "@classes/Card";
-import { dealCardToPlayer, sortByPlayerOrder } from "@services/player";
+import { sortByPlayerOrder } from "@services/player";
+import Hand from "@models/Hand";
+import { sortCards } from "@services/card";
 
-// Initial Player attributes
-const initPlayerAttributes = {
-  score: { wins: 0, ties: 0, losses: 0 },
-  pocket: [],
-};
+/** Deals card to Player */
+export function dealCardToPlayer(hand: Hand, card: Card): Hand {
+  if (hand.pocket.length < 2) {
+    return { ...hand, pocket: [...hand.pocket, card] };
+  } else {
+    throw Error("Player already has 2 cards");
+  }
+}
+
+/**
+ * Resets the pocket cards of all Hands
+ * @param hands
+ * @returns empty Hand[]
+ */
+export function resetPlayerPockets(hands: Hand[]) {
+  return hands.map((hand) => {
+    return { ...hand, pocket: [] };
+  });
+}
+
 // Players start with empty score
 const initScore: Score = { wins: 0, ties: 0, losses: 0 };
 
@@ -23,10 +40,10 @@ export function addPlayers(game: Game, payload: ActionPayload) {
     throw Error("Missing characters");
   }
 
-  const addedPlayers = payload.characters.map((character, playerId) => {
-    const isUser = playerId === 0;
+  const addedPlayers = payload.characters.map((character, index) => {
+    const isUser = index === 0;
 
-    return { character, score: initScore, pocket: [], isUser, playerId };
+    return { character, score: initScore, pocket: [], isUser };
   });
 
   return {
@@ -36,18 +53,67 @@ export function addPlayers(game: Game, payload: ActionPayload) {
 }
 
 /**
- * Deals 1 card to all players
+ * Deals pocket to all players
  * @param game
  * @returns Game
  */
-export function dealCard(game: Game) {
+export function dealPocket(game: Game): Game {
   const deck = game.deck;
-  const players = game.players.map((player) => {
+
+  const playersWithOneCard: Hand[] = game.hands.map((hand) => {
+    const dealtCard: Card = deck.splice(0, 1)[0];
+    return dealCardToPlayer(hand, dealtCard);
+  });
+
+  const unsortedHands: Hand[] = playersWithOneCard.map((player) => {
     const dealtCard: Card = deck.splice(0, 1)[0];
     return dealCardToPlayer(player, dealtCard);
   });
 
-  return { ...game, players, deck };
+  const hands: Hand[] = unsortedHands.map((hand) => {
+    return { ...hand, pocket: sortCards(hand.pocket) };
+  });
+
+  return { ...game, state: GameState.AWAITING_FLOP, hands, deck };
+}
+
+/**
+ * deals flop
+ * @param game
+ * @returns Game
+ */
+export function dealFlop(game: Game) {
+  const { deck } = game;
+  const community = deck.splice(0, 3);
+
+  return { ...game, deck, state: GameState.AWAITING_TURN, community };
+}
+
+export function dealTurn(game: Game) {
+  const deck = game.deck;
+  const community = game.community;
+  if (community.length > 4) throw Error("Turn already dealt");
+  const dealtCard = deck.shift();
+
+  if (!dealtCard) throw Error("Deck has no cards");
+  community.push(dealtCard);
+
+  const state = GameState.AWAITING_RIVER;
+
+  return { ...game, deck, state, community };
+}
+
+export function dealRiver(game: Game) {
+  const deck = game.deck;
+  const community = game.community;
+
+  const dealtCard = deck.shift();
+  if (!dealtCard) throw Error("Deck has no cards");
+  community.push(dealtCard);
+
+  const state = GameState.UPDATING_SCORE;
+
+  return { ...game, deck, state, community };
 }
 
 export function assignPlayerOrder(game: Game) {

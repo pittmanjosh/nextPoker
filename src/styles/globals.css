@@ -107,13 +107,34 @@ a {
   }
 }
 
+.game-table {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.player {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.card-array {
+  display: flex;
+  gap: 0.25rem;
+}
+
 .playing-card {
   height: 3.5rem;
   width: 2.5rem;
   color: black;
   background-color: white;
-  border-radius: 0.5rem;
-  padding: 0.25rem;
+  border-radius: 0.25rem;
+  padding: 0.1rem;
+}
+
+.playing-card.back {
+  background-image: url("/CardBack.png");
+  background-size: 100% 100%;
 }
 
 .playing-card.red {
@@ -129,4 +150,21 @@ a {
 
 .selector-character-panel > img {
   justify-self: center;
+}
+
+.character-image {
+  border-radius: 30px;
+}
+
+.character-image.selected,
+.character-image.in-game {
+  border: 2px solid black;
+}
+
+.character-image.character-image.selected {
+  opacity: 25%;
+}
+
+.character-image.user {
+  border-color: red;
 }

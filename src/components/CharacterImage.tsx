@@ -8,27 +8,20 @@ import Player from "@models/Player";
 type CharacterProps = {
   character: Character;
   onClick?: () => void;
-  player?: Player;
+  isUser: boolean;
+  className?: string;
 };
 
-const CharacterImage = ({ player, character, onClick }: CharacterProps) => {
+const CharacterImage = ({
+  character,
+  onClick,
+  isUser,
+  className,
+}: CharacterProps) => {
   const { name, nickname } = character;
   const { players } = useGameContext();
   const isGameBegun = players.length === 6;
-  const playerInGame = Boolean(
-    players.find((player) => player.character.avatar == character.avatar)
-  );
-  const isUser = Boolean(player?.isUser);
-  const opactity = isGameBegun ? "100%" : playerInGame ? "25%" : "100%";
-  const border = player ? `2px solid ${isUser ? "red" : "black"}` : "";
 
-  const handleClick = () => {
-    if (!isGameBegun) {
-      onClick && !playerInGame && onClick();
-    } else {
-      onClick && onClick();
-    }
-  };
   return (
     <OverlayTrigger
       placement="bottom"
@@ -37,12 +30,12 @@ const CharacterImage = ({ player, character, onClick }: CharacterProps) => {
       }
     >
       <Image
+        className={`character-image ${className} ${isUser && "user"}`}
         src={character.avatar}
         alt={character.name}
-        onClick={handleClick}
+        onClick={onClick}
         width="60"
         height="60"
-        style={{ borderRadius: "30px", opacity: opactity, border: border }}
       />
     </OverlayTrigger>
   );

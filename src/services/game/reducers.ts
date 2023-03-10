@@ -1,13 +1,23 @@
 import Character from "@models/Character";
-import Game from "@models/Game";
-import { createDeck } from "../deck";
-import { addPlayers, dealCard, assignPlayerOrder } from ".";
+import Game, { GameState } from "@models/Game";
+import { createDeck, shuffleDeck } from "../deck";
+import {
+  addPlayers,
+  dealPocket,
+  dealFlop,
+  assignPlayerOrder,
+  dealTurn,
+  dealRiver,
+} from ".";
+import { emptyHands } from "@models/Hand";
 
 export enum ActionType {
-  "START_GAME",
   "ADD_PLAYERS",
-  "DEAL_CARD",
-  "DEAL_COMMUNITY",
+  "DEAL_POCKET",
+  "DEAL_FLOP",
+  "DEAL_TURN",
+  "DEAL_RIVER",
+  "UPDATE_SCORE",
   "RESET_GAME",
 }
 
@@ -18,20 +28,37 @@ export type GameAction = {
 
 export type ActionPayload = {
   characters?: Character[];
-  playerId?: number;
 };
 
 export default function gameReducer(game: Game, action: GameAction): Game {
   switch (action.type) {
     case ActionType.ADD_PLAYERS: {
-      return assignPlayerOrder(addPlayers(game, action.payload));
+      return assignPlayerOrder(
+        addPlayers(
+          {
+            ...game,
+            state: GameState.AWAITING_POCKET,
+          },
+          action.payload
+        )
+      );
     }
-    case ActionType.DEAL_CARD: {
-      return dealCard(game);
-    }
+    case ActionType.DEAL_POCKET:
+      return dealPocket(game);
+    case ActionType.DEAL_FLOP:
+      return dealFlop(game);
+    case ActionType.DEAL_TURN:
+      return dealTurn(game);
+    case ActionType.DEAL_RIVER:
+      return dealRiver(game);
     case ActionType.RESET_GAME: {
-      const deck = createDeck();
-      return { players: [], deck: deck };
+      return {
+        state: GameState.SELECTING_PLAYERS,
+        players: [],
+        hands: [],
+        deck: createDeck(),
+        community: [],
+      };
     }
     default: {
       return game;

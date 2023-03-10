@@ -44,7 +44,7 @@ export class Card {
 type CardSuit = {
   name: "spades" | "diamonds" | "clubs" | "hearts";
   color: "red" | "black";
-  symbol: "♠" | "◆" | "♣" | "♥";
+  symbol: "♠" | "♥" | "◆" | "♣";
   sortIndex: number;
 };
 
@@ -55,24 +55,24 @@ export const Spades: CardSuit = {
   sortIndex: 0,
 };
 
+const Hearts: CardSuit = {
+  name: "hearts",
+  color: "red",
+  symbol: "♥",
+  sortIndex: 1,
+};
+
 export const Diamonds: CardSuit = {
   name: "diamonds",
   color: "red",
   symbol: "◆",
-  sortIndex: 1,
+  sortIndex: 2,
 };
 
 const Clubs: CardSuit = {
   name: "clubs",
   color: "black",
   symbol: "♣",
-  sortIndex: 2,
-};
-
-const Hearts: CardSuit = {
-  name: "hearts",
-  color: "red",
-  symbol: "♥",
   sortIndex: 3,
 };
 
