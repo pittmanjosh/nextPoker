@@ -69,7 +69,7 @@ export const Diamonds: CardSuit = {
   sortIndex: 2,
 };
 
-const Clubs: CardSuit = {
+export const Clubs: CardSuit = {
   name: "clubs",
   color: "black",
   symbol: "♣",
@@ -100,19 +100,19 @@ export const Three: CardValue = {
   points: 3,
 };
 
-const Four: CardValue = {
+export const Four: CardValue = {
   symbol: "4",
   name: "four",
   points: 4,
 };
 
-const Five: CardValue = {
+export const Five: CardValue = {
   symbol: "5",
   name: "five",
   points: 5,
 };
 
-const Six: CardValue = {
+export const Six: CardValue = {
   symbol: "6",
   name: "six",
   points: 6,
